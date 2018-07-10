@@ -8,21 +8,21 @@ groups:
   text: "Kube-apiserver"
   checks:
     - id: 0
-      text: "flag is set"
+      text: "0: flag is set"
       tests:
         test_items:
           - flag: "--allow-privileged"
             set: true
 
     - id: 1
-      text: "flag is not set"
+      text: "1: flag is not set"
       tests:
         test_item:
           - flag: "--basic-auth"
             set: false
 
     - id: 2
-      text: "flag value is set to some value"
+      text: "2: flag value is set to some value"
       tests:
         test_items:
           - flag: "--insecure-port"
@@ -32,7 +32,7 @@ groups:
             set: true
 
     - id: 3
-      text: "flag value is greater than or equal some number"
+      text: "3: flag value is greater than or equal some number"
       tests:
         test_items:
           - flag: "--audit-log-maxage"
@@ -42,7 +42,7 @@ groups:
             set: true
 
     - id: 4
-      text: "flag value is less than some number"
+      text: "4: flag value is less than some number"
       tests:
         test_items:
           - flag: "--max-backlog"
@@ -52,7 +52,7 @@ groups:
             set: true
 
     - id: 5
-      text: "flag value does not have some value"
+      text: "5: flag value does not have some value"
       tests:
         test_items:
           - flag: "--admission-control"
@@ -62,7 +62,7 @@ groups:
             set: true
 
     - id: 6
-      text: "test AND binary operation"
+      text: "6: test AND binary operation"
       tests:
         bin_op: and
         test_items:
@@ -72,7 +72,7 @@ groups:
           set: true
 
     - id: 7
-      text: "test OR binary operation"
+      text: "7: test OR binary operation"
       tests:
         bin_op: or
         test_items:
@@ -86,17 +86,16 @@ groups:
             set: false
 
     - id: 8
-      text: "test flag with arbitrary text"
+      text: "8: test flag with arbitrary text"
       tests:
         test_items:
         - flag: "644"
           compare:
-            op: eq
+            op: has
             value: "644"
-          set: true
 
     - id: 9
-      text: "test permissions"
+      text: "9: test flag with multiple arbitrary text"
       audit: "/bin/sh -c 'if test -e $config; then stat -c %a $config; fi'"
       tests:
         bin_op: or
@@ -105,20 +104,17 @@ groups:
           compare:
             op: eq
             value: "644"
-          set: true
         - flag: "640"
           compare:
             op: eq
             value: "640"
-          set: true
         - flag: "600"
           compare:
             op: eq
             value: "600"
-          set: true
 
     - id: 10
-      text: "flag value includes some value in a comma-separated list, value is last in list"
+      text: "10: flag value includes some value in a comma-separated list, value is last in list"
       tests:
         test_items:
           - flag: "--admission-control"
@@ -128,7 +124,7 @@ groups:
             set: true
 
     - id: 11
-      text: "flag value includes some value in a comma-separated list, value is first in list"
+      text: "11: flag value includes some value in a comma-separated list, value is first in list"
       tests:
         test_items:
           - flag: "--admission-control"
@@ -138,7 +134,7 @@ groups:
             set: true
 
     - id: 12
-      text: "flag value includes some value in a comma-separated list, value middle of list"
+      text: "12: flag value includes some value in a comma-separated list, value middle of list"
       tests:
         test_items:
           - flag: "--admission-control"
@@ -148,7 +144,7 @@ groups:
             set: true
 
     - id: 13
-      text: "flag value includes some value in a comma-separated list, value only one in list"
+      text: "13: flag value includes some value in a comma-separated list, value only one in list"
       tests:
         test_items:
           - flag: "--admission-control"
@@ -157,4 +153,22 @@ groups:
               value: Something
             set: true
 
+    - id: 14
+      text: "14: long flag, short string; flag should not match"
+      tests:
+        test_items:
+          - flag: "--admission-control-config"
+            compare:
+              op: has
+              value: Something
+            set: true
 
+    - id: 15
+      text: "15: short flag, long string; flag should not match"
+      tests:
+        test_items:
+          - flag: "--admission-control"
+            compare:
+              op: has
+              value: Something
+            set: true

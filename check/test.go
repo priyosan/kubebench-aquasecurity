@@ -63,7 +63,8 @@ func (t *testItem) execute(s string) (result bool) {
 			// --flag
 			// somevalue
 			//pttn := `(` + t.Flag + `)(=)*([^\s,]*) *`
-			pttn := `(` + t.Flag + `)(=)*([^\s]*) *`
+			// pttn := `(` + t.Flag + `)(=)*([^\s]*) *`
+			pttn := `(` + t.Flag + `)([=\s])+([^\s]*) *`
 			flagRe := regexp.MustCompile(pttn)
 			vals := flagRe.FindStringSubmatch(s)
 
@@ -74,7 +75,11 @@ func (t *testItem) execute(s string) (result bool) {
 					flagVal = vals[1]
 				}
 			} else {
-				fmt.Fprintf(os.Stderr, "invalid flag in testitem definition")
+				fmt.Fprintf(os.Stderr,
+					"flag '%s' does not match format --flag=somevalue or --flag in string\n%s\n",
+					t.Flag,
+					s,
+				)
 				os.Exit(1)
 			}
 
