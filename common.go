@@ -96,6 +96,8 @@ func runChecks(nodetype nodeType) {
 	} else if checkList != "" && groupList == "" {
 		ids := cleanIDs(checkList)
 		summary = controls.RunChecks(ids...)
+		// Do not ever print group summary for single checks
+		noGroupSummary = true
 	} else if checkList != "" && groupList != "" {
 		exitWithError(fmt.Errorf("group option and check option can't be used together"))
 	} else {
@@ -144,6 +146,25 @@ func prettyPrint(r *check.Controls, summary check.Summary) {
 		}
 
 		fmt.Println()
+	}
+
+	// Print group summary
+	if !noGroupSummary {
+		var res check.State
+		for _, g := range r.Groups {
+			if g.Fail > 0 {
+				res = check.FAIL
+			} else if g.Warn > 0 {
+				res = check.WARN
+			} else {
+				res = check.PASS
+			}
+		}
+
+		colors[res].Printf("== Group Summary ==\n")
+		fmt.Printf("%d checks PASS\n%d checks FAIL\n%d checks WARN\n\n",
+			summary.Pass, summary.Fail, summary.Warn,
+		)
 	}
 
 	// Print remediations.

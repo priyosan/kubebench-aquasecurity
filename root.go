@@ -39,6 +39,7 @@ var (
 	federatedFile      string
 	noResults          bool
 	noSummary          bool
+	noGroupSummary     bool
 	noRemediations     bool
 )
 
@@ -68,6 +69,7 @@ func init() {
 	RootCmd.PersistentFlags().BoolVar(&noResults, "noresults", false, "Disable printing of results section")
 	RootCmd.PersistentFlags().BoolVar(&noSummary, "nosummary", false, "Disable printing of summary section")
 	RootCmd.PersistentFlags().BoolVar(&noRemediations, "noremediations", false, "Disable printing of remediations section")
+	RootCmd.PersistentFlags().BoolVar(&noGroupSummary, "nogroupsummary", false, "Disable printing of summary for summary for check groups")
 	RootCmd.PersistentFlags().BoolVar(&jsonFmt, "json", false, "Prints the results as JSON")
 	RootCmd.PersistentFlags().BoolVar(&pgSQL, "pgsql", false, "Save the results to PostgreSQL")
 
