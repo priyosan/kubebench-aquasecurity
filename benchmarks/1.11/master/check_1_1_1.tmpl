@@ -1,0 +1,16 @@
+{{ define "check_1_1_1" }}
+  - id: {{ default "1.1.1" .id }}
+    description: "Ensure that the --anonymous-auth argument is set to false (Scored)"
+    audit: "ps -ef | grep {{ .config.MasterConfig.APIServer.Bin }} | grep -v grep"
+    tests:
+      test_items:
+      - flag: "--anonymous-auth"
+        compare:
+          op: eq
+          value: false
+        set: true
+    remediation: |
+      Edit the {{ .config.MasterConfig.APIServer.Conf }} file on the master node and set 
+      the KUBE_API_ARGS parameter to "--anonymous-auth=false"
+    scored: true
+{{ end }}

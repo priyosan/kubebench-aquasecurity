@@ -350,3 +350,10 @@ func TestGetConfigFilePath(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateBenchmarkFromTemplate(t *testing.T) {
+	err := generateBenchmarkFromTemplate(MASTER)
+	if err != nil {
+		t.Errorf("%s\n", err)
+	}
+}

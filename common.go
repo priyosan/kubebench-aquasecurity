@@ -48,6 +48,10 @@ func runChecks(nodetype nodeType) {
 	if err != nil && kubeVersion == "" {
 		exitWithError(fmt.Errorf("Version check failed: %s\nAlternatively, you can specify the version with --version", err))
 	}
+
+	// Generate benchmark from templates
+	generateBenchmarkFromTemplate(nodetype)
+
 	path, err := getConfigFilePath(kubeVersion, runningVersion, file)
 	if err != nil {
 		exitWithError(fmt.Errorf("can't find %s controls file in %s: %v", nodetype, cfgDir, err))

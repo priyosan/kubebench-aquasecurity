@@ -1,0 +1,48 @@
+---
+## Controls Files. 
+# These are YAML files that hold all the details for running checks.
+
+master:
+  kubernetes:
+    conf: /etc/kubernetes/config
+
+  apiserver:
+    bin: kube-apiserver
+    conf: /etc/kubernetes/manifests/kube-apiserver.yaml
+
+  scheduler:
+    bin: kube-scheduler
+    conf: /etc/kubernetes/manifests/kube-scheduler.yaml
+
+  controllermanager:
+    bin: kube-controller-manager
+    conf: /etc/kubernetes/manifests/kube-controller-manager.yaml
+
+  etcd:
+    optional: true
+    bin: etcd
+    conf: /etc/kubernetes/manifests/etcd.yaml
+
+  flanneld:
+    optional: true
+    bin: flanneld
+    conf: /etc/sysconfig/flanneld
+
+node:
+  kubernetes:
+    conf: /etc/kubernetes/config    
+
+  kubelet:
+    bin: kubelet
+    conf: /etc/kubernetes/kubelet.conf
+
+  proxy:
+    bin: kube-proxy
+    conf: /etc/kubernetes/proxy.conf
+
+federated:
+  fedapiserver:
+    bin: kube-federation-apiserver
+
+  fedcontrollermanager:
+    bin: kube-federation-controller-manager

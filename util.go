@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -9,10 +10,14 @@ import (
 	"strconv"
 	"strings"
 
+	"text/template"
+
+	"github.com/Masterminds/sprig"
 	"github.com/aquasecurity/bench-common/check"
 	"github.com/fatih/color"
 	"github.com/golang/glog"
 	"github.com/spf13/viper"
+	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -335,4 +340,29 @@ func makeSubstitutions(s string, ext string, m map[string]string) string {
 	}
 
 	return s
+}
+
+func generateBenchmarkFromTemplate(nodetype nodeType) error {
+	c := new(config)
+	in, err := ioutil.ReadFile("benchmarks/kubeadm.yaml")
+	if err != nil {
+		exitWithError(fmt.Errorf("%s\n", err))
+	}
+
+	yaml.Unmarshal(in, c)
+	// fmt.Println("config", viper.GetString("master.apiserver.defaultconf"))
+	// fmt.Println("config", c.MasterConfig.APIServer.DefaultConf)
+
+	b, err := os.Create("cfg/1.11/master.yaml")
+	if err != nil {
+		return err
+	}
+
+	f := "benchmarks/1.11/master/*.tmpl"
+	t := template.Must(template.New("master.tmpl").Funcs(sprig.TxtFuncMap()).ParseGlob(f))
+	err = t.Execute(b, c)
+	if err != nil {
+		return err
+	}
+	return nil
 }

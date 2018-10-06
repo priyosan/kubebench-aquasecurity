@@ -25,10 +25,11 @@ master:
       - "kube-apiserver"
       - "hyperkube apiserver"
       - "apiserver"
+    defaultbin: kube-apiserver
     confs:
       - /etc/kubernetes/apiserver.conf
       - /etc/kubernetes/apiserver
-    defaultconf: /etc/kubernetes/apiserver
+    defaultconf: /etc/kubernetes/manifests/kube-apiserver.yaml
 
   scheduler:
     bins:
